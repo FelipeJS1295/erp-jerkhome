@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: erp
       POSTGRES_DB: erp
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5440}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -22,7 +22,7 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT:-6390}:6379"
     volumes:
       - redisdata:/data
 

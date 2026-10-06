@@ -19,7 +19,7 @@ export type Database = NodePgDatabase<typeof schema>;
         new pg.Pool({
           connectionString: config.get<string>(
             'DATABASE_URL',
-            'postgres://erp:erp@localhost:5432/erp',
+            'postgres://erp:erp@localhost:5440/erp',
           ),
           max: 10,
         }),

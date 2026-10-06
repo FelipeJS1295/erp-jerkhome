@@ -9,7 +9,7 @@ export default defineConfig({
   schema: './src/database/schema/index.ts',
   out: './drizzle',
   dbCredentials: {
-    url: process.env.DATABASE_URL ?? 'postgres://erp:erp@localhost:5432/erp',
+    url: process.env.DATABASE_URL ?? 'postgres://erp:erp@localhost:5440/erp',
   },
   strict: true,
   verbose: true,

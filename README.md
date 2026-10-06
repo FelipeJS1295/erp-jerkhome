@@ -18,12 +18,12 @@ Gestión de ventas retail, maestras de datos y conciliación de liquidaciones.
 ```
 erp-retail/
 ├── apps/
-│   ├── api/                 # Backend NestJS (puerto 4000, rutas bajo /api)
+│   ├── api/                 # Backend NestJS (puerto 4100, rutas bajo /api)
 │   │   ├── src/
 │   │   │   ├── database/    # Conexión Drizzle + esquema de tablas
 │   │   │   └── health/      # GET /api/health
 │   │   └── drizzle.config.ts
-│   └── web/                 # Frontend Next.js (puerto 3000)
+│   └── web/                 # Frontend Next.js (puerto 3100)
 │       └── src/
 │           ├── app/         # Páginas (App Router)
 │           ├── components/  # Sidebar, providers…
@@ -56,7 +56,7 @@ pnpm db:up
 pnpm dev
 ```
 
-Abre http://localhost:3000. La página de inicio muestra si la API y la base de datos están conectadas.
+Abre http://localhost:3100. La página de inicio muestra si la API y la base de datos están conectadas.
 
 ## Comandos útiles
 

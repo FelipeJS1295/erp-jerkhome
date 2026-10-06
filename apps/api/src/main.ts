@@ -11,10 +11,10 @@ async function bootstrap() {
 
   // Permite que el frontend (Next.js) llame a la API desde el navegador
   app.enableCors({
-    origin: process.env.WEB_ORIGIN ?? 'http://localhost:3000',
+    origin: process.env.WEB_ORIGIN ?? 'http://localhost:3100',
   });
 
-  const port = Number(process.env.API_PORT ?? 4000);
+  const port = Number(process.env.API_PORT ?? 4100);
   await app.listen(port);
   Logger.log(`API escuchando en http://localhost:${port}/api`, 'Bootstrap');
 }
