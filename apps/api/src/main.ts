@@ -16,7 +16,8 @@ async function bootstrap() {
   });
 
   const port = Number(process.env.API_PORT ?? 4100);
-  await app.listen(port);
+  // Solo en 127.0.0.1: desde internet se entra únicamente por Nginx
+  await app.listen(port, process.env.API_HOST ?? '127.0.0.1');
   Logger.log(`API escuchando en http://localhost:${port}/api`, 'Bootstrap');
 }
 
