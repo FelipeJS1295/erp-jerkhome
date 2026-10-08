@@ -9,9 +9,10 @@ async function bootstrap() {
   // Todas las rutas quedan bajo /api (ej: /api/health)
   app.setGlobalPrefix('api');
 
-  // Permite que el frontend (Next.js) llame a la API desde el navegador
+  // credentials: true para que el navegador envíe la cookie de sesión
   app.enableCors({
     origin: process.env.WEB_ORIGIN ?? 'http://localhost:3100',
+    credentials: true,
   });
 
   const port = Number(process.env.API_PORT ?? 4100);

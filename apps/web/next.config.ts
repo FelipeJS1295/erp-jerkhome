@@ -8,6 +8,8 @@ if (existsSync(rootEnv)) process.loadEnvFile(rootEnv);
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@erp/shared'],
+  // Oculta el botón flotante "N" de Next.js (solo aparece en desarrollo)
+  devIndicators: false,
 };
 
 export default nextConfig;

@@ -4,16 +4,32 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   BarChart3,
+  KeyRound,
+  LogOut,
+  Users,
   Boxes,
   FileSpreadsheet,
+  FileUp,
   LayoutDashboard,
+  List,
   Scale,
   Store,
+  Tags,
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { ROLE_LABELS, useAuth } from './auth';
 
-type NavItem = { label: string; href: string; icon: LucideIcon; ready: boolean };
+type NavItem = {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+  ready: boolean;
+  /** Solo para quien puede modificar (ADMIN u OPERADOR) */
+  edit?: boolean;
+  /** Solo para administradores */
+  admin?: boolean;
+};
 type NavSection = { title: string; items: NavItem[] };
 
 // "ready: false" = módulo aún no construido; se va activando paso a paso
@@ -26,26 +42,42 @@ const sections: NavSection[] = [
     title: 'Maestras',
     items: [
       { label: 'Retailers', href: '/maestras/retailers', icon: Store, ready: false },
-      { label: 'Productos', href: '/maestras/productos', icon: Boxes, ready: false },
+      { label: 'Productos', href: '/maestras/productos', icon: Boxes, ready: true },
+      { label: 'Catálogo retail', href: '/maestras/catalogo', icon: Tags, ready: true },
     ],
   },
   {
     title: 'Ventas',
     items: [
-      { label: 'Cargar archivos', href: '/ventas/cargas', icon: FileSpreadsheet, ready: false },
+      { label: 'Ver ventas', href: '/ventas/listado', icon: List, ready: true },
+      { label: 'Cargar archivos', href: '/ventas/cargas', icon: FileSpreadsheet, ready: true, edit: true },
     ],
   },
   {
     title: 'Finanzas',
     items: [
-      { label: 'Conciliación', href: '/conciliacion', icon: Scale, ready: false },
-      { label: 'Reportes', href: '/reportes', icon: BarChart3, ready: false },
+      { label: 'Conciliación', href: '/conciliacion', icon: Scale, ready: true },
+      { label: 'Cargar liquidaciones', href: '/conciliacion/cargas', icon: FileUp, ready: true, edit: true },
+      { label: 'Reportes', href: '/reportes', icon: BarChart3, ready: true },
     ],
+  },
+  {
+    title: 'Administración',
+    items: [{ label: 'Usuarios', href: '/usuarios', icon: Users, ready: true, admin: true }],
   },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { user, canEdit, isAdmin, logout } = useAuth();
+
+  // Solo se muestran las opciones que el rol del usuario puede usar
+  const visible = sections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((i) => (!i.edit || canEdit) && (!i.admin || isAdmin)),
+    }))
+    .filter((section) => section.items.length > 0);
 
   return (
     <aside className="flex w-60 shrink-0 flex-col bg-sidebar text-slate-200">
@@ -60,7 +92,7 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-5">
-        {sections.map((section) => (
+        {visible.map((section) => (
           <div key={section.title}>
             <p className="mb-1.5 px-2 text-[11px] font-medium tracking-wider text-sidebar-muted uppercase">
               {section.title}
@@ -103,8 +135,34 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="border-t border-white/10 px-5 py-3 text-[11px] text-sidebar-muted">
-        v0.1.0 · desarrollo
+      {/* Usuario con sesión */}
+      <div className="border-t border-white/10 px-3 py-3">
+        <div className="mb-2 flex items-center gap-2.5 px-2">
+          <div className="grid size-8 shrink-0 place-items-center rounded-full bg-white/10 text-xs font-semibold text-white uppercase">
+            {user.name.slice(0, 2)}
+          </div>
+          <div className="min-w-0 leading-tight">
+            <p className="truncate text-sm font-medium text-white">{user.name}</p>
+            <p className="text-[11px] text-sidebar-muted">{ROLE_LABELS[user.role]}</p>
+          </div>
+        </div>
+        <div className="flex gap-1">
+          <Link
+            href="/cuenta"
+            className={cn(
+              'flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs transition-colors',
+              pathname === '/cuenta' ? 'bg-brand-500/20 text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white',
+            )}
+          >
+            <KeyRound className="size-3.5" /> Mi cuenta
+          </Link>
+          <button
+            onClick={logout}
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+          >
+            <LogOut className="size-3.5" /> Salir
+          </button>
+        </div>
       </div>
     </aside>
   );
