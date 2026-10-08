@@ -189,13 +189,19 @@ export interface CatalogImportResult {
 }
 
 /** Un producto en el ranking de más vendidos */
+/** Un producto (de un retailer) en el ranking de más vendidos */
 export interface TopProduct {
-  /** Id del master, o "nombre:<producto>" si aún no tiene master */
   key: string;
-  skuMaster: string | null;
+  retailerCode: string;
+  /** Nombre a mostrar: Paris, Walmart, Falabella, Hites */
+  retailerLabel: string;
+  /** SKU del producto en el retailer (ej: Paris MK8400CF1K) */
+  retailerSku: string | null;
+  /** SKU del vendedor (ej: SECRICHFBNGCL) */
+  sellerSku: string | null;
   name: string;
-  /** false = el producto del retail no tiene master asignado (se agrupa por nombre) */
-  hasMaster: boolean;
+  /** false = la venta no se encontró en el catálogo del retailer */
+  inCatalog: boolean;
   units: number;
   /** Venta bruta con IVA */
   revenue: number;
@@ -206,7 +212,8 @@ export interface TopProductsReport {
   from: string | null;
   to: string | null;
   totals: { units: number; revenue: number; orders: number };
-  overall: (TopProduct & { byRetailer: Record<string, number> })[];
+  /** Top 5 de todos los retailers juntos */
+  overall: TopProduct[];
   retailers: { code: string; label: string; units: number; revenue: number; products: TopProduct[] }[];
 }
 
