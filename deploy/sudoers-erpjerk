@@ -1,0 +1,3 @@
+# Permite que el usuario erpjerk reinicie SOLO sus propios servicios (sin clave)
+# Instalar: sudo cp deploy/sudoers-erpjerk /etc/sudoers.d/erpjerk && sudo chmod 440 /etc/sudoers.d/erpjerk
+erpjerk ALL=(root) NOPASSWD: /usr/bin/systemctl restart erp-jerkhome-api erp-jerkhome-web, /usr/bin/systemctl restart erp-jerkhome-api, /usr/bin/systemctl restart erp-jerkhome-web

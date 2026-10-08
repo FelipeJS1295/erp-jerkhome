@@ -1,0 +1,22 @@
+# Frontend (Next.js) del ERP. Corre con su propio usuario de Linux (erpjerk).
+# Instalar: sudo cp deploy/erp-jerkhome-web.service /etc/systemd/system/
+[Unit]
+Description=ERP Jerkhome - Web
+After=network.target erp-jerkhome-api.service
+
+[Service]
+Type=simple
+User=erpjerk
+Group=erpjerk
+WorkingDirectory=/home/erpjerk/erp-jerkhome/apps/web
+EnvironmentFile=/home/erpjerk/erp-jerkhome/.env
+ExecStart=/usr/bin/env sh -c 'exec node node_modules/next/dist/bin/next start -H 127.0.0.1 -p "$WEB_PORT"'
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/home/erpjerk/erp-jerkhome
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
